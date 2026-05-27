@@ -287,6 +287,7 @@
                     <div class="data-row"><span class="data-title">Chave:</span><span class="data-info text-alert" id="info-name">-</span></div>
                     <div class="data-row"><span class="data-title">Status:</span><span class="data-info" id="info-status">-</span></div>
                     <div class="data-row"><span class="data-title">Duração Adquirida:</span><span class="data-info" id="info-time">-</span></div>
+                    <div class="data-row"><span class="data-title">ID Dispositivo:</span><span class="data-info" style="color: #00ffff;" id="info-device">-</span></div>
                 </div>
             </div>
         </div>
@@ -323,8 +324,20 @@
     </div>
 
     <script>
+        // Armazenamento em memória global das chaves
         const dbKeys = {};
         let userInterval = null;
+
+        {
+            if (!localStorage.getItem('system_device_id')) {
+                const randomId = 'DEV-' + Math.floor(100000 + Math.random() * 900000);
+                localStorage.setItem('system_device_id', randomId);
+            }
+        }
+
+        function getDeviceID() {
+            return localStorage.getItem('system_device_id');
+        }
 
         function clearAllScreens() {
             document.getElementById('card-client-login').style.display = 'none';
@@ -333,27 +346,24 @@
             document.getElementById('card-client-dashboard').style.display = 'none';
         }
 
-        // Mostra a tela de login do ADM
         function showAdminLoginScreen() {
             clearAllScreens();
             document.getElementById('card-adm-login').style.display = 'block';
         }
 
-        // Volta para a tela inicial do cliente
         function backToClientLogin() {
             if(userInterval) clearInterval(userInterval);
             clearAllScreens();
             document.getElementById('card-client-login').style.display = 'block';
         }
 
-        // Valida usuário e senha do administrador
         function validateAdmCredentials() {
             const user = document.getElementById('adm-user').value.trim();
             const pass = document.getElementById('adm-pass').value.trim();
 
             if (user === "Oliveira" && pass === "Oliveira1") {
                 clearAllScreens();
-                document.getElementById('card-adm-dashboard').style.display = 'block'; // Mostra o painel gerador de chaves
+                document.getElementById('card-adm-dashboard').style.display = 'block';
                 document.getElementById('adm-user').value = "";
                 document.getElementById('adm-pass').value = "";
             } else {
@@ -370,13 +380,19 @@
             if (!keyData) return alert('Esta licença não existe ou expirou!');
 
             const now = Date.now();
+            const currentDevice = getDeviceID();
 
             if (!keyData.isActivated) {
                 keyData.isActivated = true;
+                keyData.registeredDevice = currentDevice; 
                 if (keyData.durationMs === Infinity) {
                     keyData.expiresAt = Infinity;
                 } else {
                     keyData.expiresAt = now + keyData.durationMs;
+                }
+            } else {
+                if (keyData.registeredDevice !== currentDevice) {
+                    return alert('Acesso Negado! Esta Key já foi resgatada e está vinculada a outro dispositivo!');
                 }
             }
 
@@ -440,7 +456,8 @@
                     timeLabel: label,
                     durationMs: durationMs,
                     isActivated: false,
-                    expiresAt: null
+                    expiresAt: null,
+                    registeredDevice: null 
                 };
 
                 const div = document.createElement('div');
@@ -468,25 +485,9 @@
                 const record = dbKeys[target];
                 document.getElementById('info-name').innerText = target;
                 document.getElementById('info-time').innerText = record.timeLabel;
+                document.getElementById('info-device').innerText = record.registeredDevice ? record.registeredDevice : "Nenhum";
 
                 if (!record.isActivated) {
                     document.getElementById('info-status').innerText = "Aguardando Ativação";
                     document.getElementById('info-status').className = "data-info text-live";
-                } else if (Date.now() > record.expiresAt) {
-                    document.getElementById('info-status').innerText = "Expirada";
-                    document.getElementById('info-status').className = "data-info text-alert";
-                } else {
-                    document.getElementById('info-status').innerText = "Ativa e rodando";
-                    document.getElementById('info-status').className = "data-info text-live";
-                }
-            } else {
-                document.getElementById('info-name').innerText = target;
-                document.getElementById('info-status').innerText = "Inexistente";
-                document.getElementById('info-status').className = "data-info text-alert";
-                document.getElementById('info-time').innerText = "-";
-            }
-            box.style.display = 'block';
-        }
-    </script>
-</body>
-</html>
+                } else if (Date.now() > rec
