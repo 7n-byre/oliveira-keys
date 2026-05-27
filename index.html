@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OLIVEIRA - PRESTIGE PANEL</title>
+    <title>OLIVEIRA - SECURE SYSTEM</title>
     <style>
-        /* Reset de Estilos */
+        /* Reset e Base do Sistema */
         * {
             margin: 0;
             padding: 0;
@@ -13,14 +13,12 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* Animação Automática de Cor entre Preto e Vermelho */
         @keyframes autoGlowBg {
             0% { background-color: #000000; }
-            50% { background-color: #3a0000; }
+            50% { background-color: #2a0000; }
             100% { background-color: #000000; }
         }
 
-        /* Efeito de Pulso Neon nas Bordas e Textos */
         @keyframes pulseNeon {
             0% { border-color: #ff0000; box-shadow: 0 0 15px rgba(255, 0, 0, 0.5); }
             50% { border-color: #000000; box-shadow: 0 0 5px rgba(255, 0, 0, 0.1); }
@@ -32,61 +30,34 @@
             color: #fff;
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 20px;
-            transition: background-color 1s ease;
+            padding: 15px;
         }
 
-        /* Layout do Dashboard */
-        .dashboard {
+        /* Estrutura dos Cards */
+        .wrapper-card {
             width: 100%;
-            max-width: 1000px;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 30px;
-        }
-
-        @media (min-width: 768px) {
-            .dashboard {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        /* Título do Topo */
-        .main-header {
-            grid-column: 1 / -1;
-            text-align: center;
-            margin-bottom: -10px;
-        }
-
-        .main-header h1 {
-            font-size: 4rem;
-            font-weight: 900;
-            color: #ffffff;
-            text-transform: uppercase;
-            letter-spacing: 12px;
-            text-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000;
-        }
-
-        /* Painéis Modernos */
-        .card-panel {
+            max-width: 450px;
             background: rgba(10, 10, 10, 0.95);
             border: 2px solid #ff0000;
             border-radius: 16px;
-            padding: 35px;
+            padding: 30px;
             animation: pulseNeon 5s infinite ease-in-out;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(10px);
         }
 
-        .panel-header {
+        /* Expansão do Painel de Controle do ADM */
+        .wrapper-card.adm-panel-width {
+            max-width: 900px;
+        }
+
+        /* Títulos */
+        .panel-title {
             font-size: 1.4rem;
             font-weight: bold;
-            color: #fff;
             text-transform: uppercase;
             letter-spacing: 3px;
             border-bottom: 2px solid #ff0000;
@@ -96,11 +67,8 @@
             text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
         }
 
-        /* Inputs e Selects */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
+        /* Formulários */
+        .form-group { margin-bottom: 20px; }
         label {
             display: block;
             font-size: 0.8rem;
@@ -110,32 +78,30 @@
             margin-bottom: 8px;
             font-weight: bold;
         }
-
-        .select-field, .input-field {
+        .input-field, .select-field {
             width: 100%;
             background: #000000;
-            border: 1px solid rgba(255, 0, 0, 0.5);
+            border: 1px solid rgba(255, 0, 0, 0.4);
             border-radius: 8px;
-            padding: 15px;
+            padding: 14px;
             color: #fff;
-            font-size: 1rem;
+            font-size: 0.95rem;
             outline: none;
             transition: 0.3s;
         }
-
-        .select-field:focus, .input-field:focus {
+        .input-field:focus, .select-field:focus {
             border-color: #ff0000;
             box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
         }
 
-        /* Botão Principal */
+        /* Botões */
         .btn-core {
             width: 100%;
             background: linear-gradient(90deg, #990000 0%, #ff0000 100%);
             color: #fff;
             border: none;
-            padding: 16px;
-            font-size: 1.05rem;
+            padding: 15px;
+            font-size: 1rem;
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -143,307 +109,384 @@
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
+            margin-bottom: 10px;
         }
-
         .btn-core:hover {
             transform: translateY(-2px);
             filter: brightness(1.2);
-            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.6);
         }
 
-        /* Caixa de Saída Multi-Keys */
+        /* Grid ADM */
+        .adm-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        @media (min-width: 768px) {
+            .adm-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        /* Caixas de resultado */
         .output-box {
-            margin-top: 25px;
+            margin-top: 20px;
             background: #050505;
             border: 1px dashed #ff0000;
             border-radius: 8px;
-            padding: 20px;
-            display: none;
+            padding: 15px;
         }
-
         .keys-list-container {
-            max-height: 180px;
+            max-height: 150px;
             overflow-y: auto;
             margin-bottom: 15px;
-            padding-right: 5px;
         }
-
-        /* Scrollbar customizada */
-        .keys-list-container::-webkit-scrollbar {
-            width: 6px;
-        }
-        .keys-list-container::-webkit-scrollbar-thumb {
-            background-color: #ff0000;
-            border-radius: 4px;
-        }
-
         .key-item {
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 1.25rem;
+            font-family: monospace;
+            font-size: 1.1rem;
             color: #00ff66;
-            font-weight: bold;
             text-align: center;
-            letter-spacing: 2px;
             background: #000;
-            padding: 10px;
+            padding: 8px;
             border-radius: 6px;
-            border: 1px solid #111;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
+            border: 1px solid #222;
         }
 
-        .success-message {
-            font-size: 0.85rem;
-            color: #00ff66;
-            text-align: center;
-            margin-top: 12px;
-            font-weight: bold;
-            letter-spacing: 0.5px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 10px;
-        }
-
-        /* Linhas de Resultados do Testador */
+        /* Linhas de Informações */
         .data-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 0;
-            font-size: 0.9rem;
+            padding: 10px 0;
+            font-size: 0.85rem;
             border-bottom: 1px solid rgba(255, 0, 0, 0.15);
         }
-
-        .data-row:last-child {
-            border-bottom: none;
-        }
-
-        .data-title {
-            color: #888;
-        }
-
-        .data-info {
-            font-weight: bold;
-        }
-
-        .text-live { color: #00ff66; text-shadow: 0 0 5px rgba(0, 255, 102, 0.3); }
+        .data-title { color: #888; }
+        .data-info { font-weight: bold; }
+        .text-live { color: #00ff66; }
         .text-alert { color: #ff3333; }
-        .text-ip { color: #00ffff; font-family: monospace; }
-
+        
         .btn-copy {
-            background: transparent;
-            border: 1px solid #00ff66;
-            color: #00ff66;
-            padding: 8px 18px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            display: block;
-            margin: 0 auto;
-            transition: 0.3s;
-            text-transform: uppercase;
-            font-weight: bold;
+            background: transparent; border: 1px solid #00ff66; color: #00ff66;
+            padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.75rem;
+            display: block; margin: 0 auto 10px auto; text-transform: uppercase;
         }
+        .btn-copy:hover { background: #00ff66; color: #000; }
 
-        .btn-copy:hover {
+        /* Proxies */
+        .proxy-block {
+            background: #000;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .proxy-title {
+            color: #ff3333;
+            font-weight: bold;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+            padding-bottom: 4px;
+        }
+        .proxy-info {
+            font-family: monospace;
+            font-size: 0.95rem;
+            margin: 4px 0;
+            color: #fff;
+        }
+        .proxy-info span { color: #00ffff; }
+        .link-button {
+            display: block;
+            text-align: center;
+            background: #222;
+            color: #00ff66;
+            border: 1px solid #00ff66;
+            padding: 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+        .link-button:hover {
             background: #00ff66;
             color: #000;
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
         }
     </style>
 </head>
 <body>
 
-    <div class="dashboard">
+    <div class="wrapper-card" id="card-client-login" style="display: block;">
+        <div class="panel-title">Área de Acesso Cliente</div>
+        <div class="form-group">
+            <label>Insira sua Licença (Key):</label>
+            <input type="text" class="input-field" id="client-key-input" placeholder="KEY-OLIVEIRA-XXXX">
+        </div>
+        <button class="btn-core" onclick="authClientLogin()">Entrar no Sistema</button>
         
-        <!-- Cabeçalho Principal -->
-        <header class="main-header">
-            <h1>Oliveira</h1>
-        </header>
+        <button class="btn-core" style="background: #222; border: 1px dashed #ff0000; margin-top: 15px;" onclick="showAdminLoginScreen()">Acesse Área ADM Aqui</button>
+    </div>
 
-        <!-- PAINEL 1: GERADOR MULTI-KEYS INFINITO -->
-        <div class="card-panel">
+    <div class="wrapper-card" id="card-adm-login" style="display: none;">
+        <div class="panel-title">Login Adm Keys</div>
+        <div class="form-group">
+            <label>Nome:</label>
+            <input type="text" class="input-field" id="adm-user" placeholder="Usuário Admin">
+        </div>
+        <div class="form-group">
+            <label>Senha:</label>
+            <input type="password" class="input-field" id="adm-pass" placeholder="Senha Admin">
+        </div>
+        <button class="btn-core" onclick="validateAdmCredentials()">Acessar Painel</button>
+        <button class="btn-core" style="background: #222;" onclick="backToClientLogin()">Voltar</button>
+    </div>
+
+    <div class="wrapper-card adm-panel-width" id="card-adm-dashboard" style="display: none;">
+        <div class="panel-title">Oliveira - Gerenciador Master</div>
+        
+        <div class="adm-grid">
             <div>
-                <div class="panel-header">Geração de Acessos</div>
-                
+                <label>Tempo de Validade:</label>
                 <div class="form-group">
-                    <label>Tempo de Validade:</label>
                     <select class="select-field" id="select-days">
+                        <option value="test">10 Segundos (Para Testes)</option>
                         <option value="1">1 Dia</option>
                         <option value="7">7 Dias</option>
                         <option value="15">15 Dias</option>
+                        <option value="30">30 Dias</option>
+                        <option value="infinite">Permanente</option>
                     </select>
                 </div>
-
+                <label>Quantidade:</label>
                 <div class="form-group">
-                    <label>Quantidade de Chaves a Gerar:</label>
                     <select class="select-field" id="select-quantity">
                         <option value="1">Gerar 1 Key</option>
                         <option value="5">Gerar 5 Keys</option>
                         <option value="10">Gerar 10 Keys</option>
-                        <option value="20">Gerar 20 Keys</option>
                     </select>
                 </div>
+                <button class="btn-core" onclick="admGenerateKeys()">Gerar Novas Keys</button>
 
-                <div class="data-row" style="border-bottom: none; margin-bottom: 10px;">
-                    <span class="data-title">Banco de Dados de Chaves:</span>
-                    <span class="data-info text-live" style="letter-spacing: 1px;">⚙ INFINITO</span>
+                <div class="output-box" id="box-generator" style="display: none;">
+                    <div class="keys-list-container" id="container-keys-list"></div>
+                    <button class="btn-copy" onclick="copyAdmKeys()">Copiar Tudo</button>
                 </div>
             </div>
 
             <div>
-                <button class="btn-core" onclick="generateSystemKeys()">Gerar Acessos</button>
-
-                <div class="output-box" id="box-generator">
-                    <div class="keys-list-container" id="container-keys-list">
-                        <!-- As chaves geradas entram aqui -->
-                    </div>
-                    <button class="btn-copy" onclick="copyAllGeneratedKeys()">Copiar Lista de Chaves</button>
-                    <div class="success-message">
-                        ✓ Sua Key foi gerada com sucesso! Agora você pode enviar para seu cliente.
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- PAINEL 2: TESTADOR DE CREDENCIAIS (REALISTA) -->
-        <div class="card-panel">
-            <div>
-                <div class="panel-header">Teste Key</div>
-                
+                <label>Inspecionar Histórico da Chave:</label>
                 <div class="form-group">
-                    <label>Insira uma Chave para Análise:</label>
-                    <input type="text" class="input-field" id="input-key" placeholder="Cole uma KEY-OLIVEIRA-XXXX aqui">
+                    <input type="text" class="input-field" id="input-key-inspector" placeholder="Cole a Key do cliente aqui">
                 </div>
-            </div>
+                <button class="btn-core" style="background: #000; border: 1px solid #ff0000;" onclick="admInspectKey()">Analisar Registro</button>
 
-            <div>
-                <button class="btn-core" style="background: #000; border: 1px solid #ff0000;" onclick="checkKeyLiveDetails()">Verificar Dados de Registro</button>
-
-                <div class="output-box" id="box-tester">
-                    <div class="data-row">
-                        <span class="data-title">Chave Identificada:</span>
-                        <span class="data-info" id="info-name" style="color: #ff3333; font-family: monospace;">-</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="data-title">Status Global:</span>
-                        <span class="data-info" id="info-status">-</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="data-title">Duração Definida:</span>
-                        <span class="data-info" id="info-time">-</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="data-title">IP Registrado:</span>
-                        <span class="data-info text-ip" id="info-ip">-</span>
-                    </div>
-                    <div class="data-row">
-                        <span class="data-title">Seu Aparelho Atual:</span>
-                        <span class="data-info" id="info-device" style="color: #00ffff; font-size: 0.85rem;">-</span>
-                    </div>
+                <div class="output-box" id="box-tester" style="display: none;">
+                    <div class="data-row"><span class="data-title">Chave:</span><span class="data-info text-alert" id="info-name">-</span></div>
+                    <div class="data-row"><span class="data-title">Status:</span><span class="data-info" id="info-status">-</span></div>
+                    <div class="data-row"><span class="data-title">Duração Adquirida:</span><span class="data-info" id="info-time">-</span></div>
                 </div>
             </div>
         </div>
+        
+        <button class="btn-core" style="background: #222; margin-top: 20px;" onclick="backToClientLogin()">Sair do Painel ADM</button>
+    </div>
 
+    <div class="wrapper-card" id="card-client-dashboard" style="display: none; max-width: 500px;">
+        <div class="panel-title">Painel de Acesso VIP</div>
+        
+        <div class="data-row" style="background: rgba(255,0,0,0.05); padding: 10px; border-radius: 6px; margin-bottom: 15px;">
+            <span class="data-title" style="color: #fff;">Tempo de Licença:</span>
+            <span class="data-info text-live" id="user-display-timer">Calculando...</span>
+        </div>
+
+        <div class="proxy-block">
+            <div class="proxy-title">🎯 PROXY HS PESCOÇO</div>
+            <div class="proxy-info">🌐 SERVIDOR: <span>144.172.100.226</span></div>
+            <div class="proxy-info">📡 PORTA: <span>10099</span></div>
+        </div>
+
+        <div class="proxy-block">
+            <div class="proxy-title">🎯 PROXY HS PESCOÇO COM ANTENA</div>
+            <div class="proxy-info">🌐 SERVIDOR: <span>69.197.176.242</span></div>
+            <div class="proxy-info">📡 PORTA: <span>10065</span></div>
+        </div>
+
+        <div style="margin-top: 15px;">
+            <label>Site dos Certificados:</label>
+            <a href="https://linktr.ee/shelbycommunity" target="_blank" class="link-button">Abrir Linktree Shelby</a>
+        </div>
+
+        <button class="btn-core" style="margin-top: 25px; background: #222; font-size: 0.9rem; padding: 12px;" onclick="backToClientLogin()">Desconectar Conta</button>
     </div>
 
     <script>
-        // Banco de dados em memória local para simular a autenticação das chaves
-        const globalKeysStorage = {};
+        const dbKeys = {};
+        let userInterval = null;
 
-        // Banco de IPs falsos realistas para associar
-        const staticIpsList = ["187.12.91.241", "200.54.120.33", "179.211.84.105", "190.98.201.44", "186.22.13.72"];
-
-        // Função inteligente para detectar o modelo real do aparelho de quem está mexendo
-        function fetchCurrentDevice() {
-            const agent = navigator.userAgent;
-            if (/Android/i.test(agent)) {
-                const matchAndroid = agent.match(/Android\s+([^\s;]+);\s+([^\s;]+)/);
-                if (matchAndroid && matchAndroid[2]) return matchAndroid[2].replace(/_/g, ' ');
-                return "Dispositivo Android (Mobile)";
-            }
-            if (/iPhone/i.test(agent)) return "Apple iPhone (iOS)";
-            if (/Windows/i.test(agent)) return "PC Windows (Web/Ambiente Local)";
-            return "Aparelho Mobile Identificado";
+        function clearAllScreens() {
+            document.getElementById('card-client-login').style.display = 'none';
+            document.getElementById('card-adm-login').style.display = 'none';
+            document.getElementById('card-adm-dashboard').style.display = 'none';
+            document.getElementById('card-client-dashboard').style.display = 'none';
         }
 
-        function generateSystemKeys() {
-            const validityDays = document.getElementById('select-days').value;
-            const keysQty = parseInt(document.getElementById('select-quantity').value);
-            const listContainer = document.getElementById('container-keys-list');
-            
-            // Limpa gerações anteriores do bloco visual
-            listContainer.innerHTML = '';
+        // Mostra a tela de login do ADM
+        function showAdminLoginScreen() {
+            clearAllScreens();
+            document.getElementById('card-adm-login').style.display = 'block';
+        }
 
-            for (let i = 0; i < keysQty; i++) {
-                // Cria os 4 números aleatórios (Ex: 8374)
-                const randomId = Math.floor(1000 + Math.random() * 9000);
-                const completeKey = `KEY-OLIVEIRA-${randomId}`;
+        // Volta para a tela inicial do cliente
+        function backToClientLogin() {
+            if(userInterval) clearInterval(userInterval);
+            clearAllScreens();
+            document.getElementById('card-client-login').style.display = 'block';
+        }
 
-                // Seleciona informações aleatórias para vincular a esta chave específica
-                const simulatedIp = staticIpsList[Math.floor(Math.random() * staticIpsList.length)];
-                const deviceInUse = fetchCurrentDevice();
+        // Valida usuário e senha do administrador
+        function validateAdmCredentials() {
+            const user = document.getElementById('adm-user').value.trim();
+            const pass = document.getElementById('adm-pass').value.trim();
 
-                // Armazena no banco dinâmico
-                globalKeysStorage[completeKey] = {
-                    time: validityDays + (parseInt(validityDays) === 1 ? ' Dia' : ' Dias'),
-                    status: 'Ativo / Liberado',
-                    ip: simulatedIp,
-                    device: deviceInUse
-                };
+            if (user === "Oliveira" && pass === "Oliveira1") {
+                clearAllScreens();
+                document.getElementById('card-adm-dashboard').style.display = 'block'; // Mostra o painel gerador de chaves
+                document.getElementById('adm-user').value = "";
+                document.getElementById('adm-pass').value = "";
+            } else {
+                alert('Acesso Negado! Nome ou Senha de administrador incorretos.');
+            }
+        }
 
-                // Adiciona o item visualmente na lista
-                const divKeyItem = document.createElement('div');
-                divKeyItem.className = 'key-item';
-                divKeyItem.innerText = completeKey;
-                listContainer.appendChild(divKeyItem);
+        /* --- SISTEMA DO CLIENTE --- */
+        function authClientLogin() {
+            const inputKey = document.getElementById('client-key-input').value.trim();
+            if (!inputKey) return alert('Por favor, digite uma Key válida!');
+
+            const keyData = dbKeys[inputKey];
+            if (!keyData) return alert('Esta licença não existe ou expirou!');
+
+            const now = Date.now();
+
+            if (!keyData.isActivated) {
+                keyData.isActivated = true;
+                if (keyData.durationMs === Infinity) {
+                    keyData.expiresAt = Infinity;
+                } else {
+                    keyData.expiresAt = now + keyData.durationMs;
+                }
             }
 
-            // Exibe a caixa do gerador
+            if (now > keyData.expiresAt) return alert('Esta licença já expirou!');
+
+            clearAllScreens();
+            document.getElementById('card-client-dashboard').style.display = 'block';
+
+            if(userInterval) clearInterval(userInterval);
+            
+            function updateClientTimer() {
+                const timeLeft = keyData.expiresAt - Date.now();
+                if (keyData.expiresAt === Infinity) {
+                    document.getElementById('user-display-timer').innerText = "Licença Vitalícia";
+                    return;
+                }
+                if (timeLeft <= 0) {
+                    clearInterval(userInterval);
+                    alert('Seu tempo de acesso acabou e sua licença expirou!');
+                    backToClientLogin();
+                } else {
+                    const secs = Math.floor((timeLeft / 1000) % 60);
+                    const mins = Math.floor((timeLeft / (1000 * 60)) % 60);
+                    const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+                    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+
+                    if(days > 0) {
+                        document.getElementById('user-display-timer').innerText = `${days}d ${hours}h ${mins}m ${secs}s`;
+                    } else {
+                        document.getElementById('user-display-timer').innerText = `${hours}h ${mins}m ${secs}s`;
+                    }
+                }
+            }
+            updateClientTimer();
+            userInterval = setInterval(updateClientTimer, 1000);
+        }
+
+        /* --- MOTOR GERADOR DO ADM --- */
+        function admGenerateKeys() {
+            const timeOption = document.getElementById('select-days').value;
+            const quantity = parseInt(document.getElementById('select-quantity').value);
+            const container = document.getElementById('container-keys-list');
+            
+            container.innerHTML = '';
+
+            for (let i = 0; i < quantity; i++) {
+                const randomId = Math.floor(1000 + Math.random() * 9000);
+                const generatedKey = `KEY-OLIVEIRA-${randomId}`;
+
+                let durationMs = 0;
+                let label = "";
+
+                if (timeOption === "test") { durationMs = 10 * 1000; label = "10 Segundos"; }
+                else if (timeOption === "1") { durationMs = 1 * 24 * 60 * 60 * 1000; label = "1 Dia"; }
+                else if (timeOption === "7") { durationMs = 7 * 24 * 60 * 60 * 1000; label = "7 Dias"; }
+                else if (timeOption === "15") { durationMs = 15 * 24 * 60 * 60 * 1000; label = "15 Dias"; }
+                else if (timeOption === "30") { durationMs = 30 * 24 * 60 * 60 * 1000; label = "30 Dias"; }
+                else if (timeOption === "infinite") { durationMs = Infinity; label = "Permanente"; }
+
+                dbKeys[generatedKey] = {
+                    timeLabel: label,
+                    durationMs: durationMs,
+                    isActivated: false,
+                    expiresAt: null
+                };
+
+                const div = document.createElement('div');
+                div.className = 'key-item';
+                div.innerText = generatedKey;
+                container.appendChild(div);
+            }
             document.getElementById('box-generator').style.display = 'block';
         }
 
-        function copyAllGeneratedKeys() {
-            const keyItems = document.querySelectorAll('.key-item');
-            let textCollection = "";
-            
-            keyItems.forEach(item => {
-                textCollection += item.innerText + "\n";
-            });
-
-            navigator.clipboard.writeText(textCollection.trim()).then(() => {
-                alert('Toda a lista de chaves gerada foi copiada para sua área de transferência!');
-            });
+        function copyAdmKeys() {
+            const items = document.querySelectorAll('.key-item');
+            let dump = "";
+            items.forEach(el => dump += el.innerText + "\n");
+            navigator.clipboard.writeText(dump.trim()).then(() => alert('Chaves copiadas!'));
         }
 
-        function checkKeyLiveDetails() {
-            const typedInput = document.getElementById('input-key').value.trim();
-            const testerBox = document.getElementById('box-tester');
+        function admInspectKey() {
+            const target = document.getElementById('input-key-inspector').value.trim();
+            const box = document.getElementById('box-tester');
 
-            if (!typedInput) {
-                alert('Insira uma chave para que o sistema possa analisar!');
-                return;
-            }
+            if(!target) return alert('Insira uma chave!');
 
-            // Se a chave constar no banco local dinâmico
-            if (globalKeysStorage[typedInput]) {
-                const verifiedData = globalKeysStorage[typedInput];
+            if(dbKeys[target]) {
+                const record = dbKeys[target];
+                document.getElementById('info-name').innerText = target;
+                document.getElementById('info-time').innerText = record.timeLabel;
 
-                document.getElementById('info-name').innerText = typedInput;
-                document.getElementById('info-status').innerText = verifiedData.status;
-                document.getElementById('info-status').className = "data-info text-live";
-                document.getElementById('info-time').innerText = verifiedData.time;
-                document.getElementById('info-ip').innerText = verifiedData.ip;
-                document.getElementById('info-device').innerText = verifiedData.device;
+                if (!record.isActivated) {
+                    document.getElementById('info-status').innerText = "Aguardando Ativação";
+                    document.getElementById('info-status').className = "data-info text-live";
+                } else if (Date.now() > record.expiresAt) {
+                    document.getElementById('info-status').innerText = "Expirada";
+                    document.getElementById('info-status').className = "data-info text-alert";
+                } else {
+                    document.getElementById('info-status').innerText = "Ativa e rodando";
+                    document.getElementById('info-status').className = "data-info text-live";
+                }
             } else {
-                // Se a chave não constar no banco (Inexistente/Incorreta)
-                document.getElementById('info-name').innerText = typedInput;
-                document.getElementById('info-status').innerText = "Inexistente ou Expirada";
+                document.getElementById('info-name').innerText = target;
+                document.getElementById('info-status').innerText = "Inexistente";
                 document.getElementById('info-status').className = "data-info text-alert";
-                document.getElementById('info-time').innerText = "Nenhum";
-                document.getElementById('info-ip').innerText = "0.0.0.0";
-                document.getElementById('info-device').innerText = fetchCurrentDevice();
+                document.getElementById('info-time').innerText = "-";
             }
-
-            testerBox.style.display = 'block';
+            box.style.display = 'block';
         }
     </script>
 </body>
-  </html>
+</html>
