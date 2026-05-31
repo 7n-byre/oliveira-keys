@@ -323,10 +323,17 @@
     </div>
 
     <script>
-        const dbKeys = {};
+        // Banco de chaves em memória limpo
+        const dbKeys = {
+            "OLIVEIRA-VIP-2026": {
+                timeLabel: "Permanente",
+                durationMs: Infinity,
+                isActivated: true,
+                expiresAt: Infinity
+            }
+        };
         let userInterval = null;
 
-        // Limpa a tela escondendo todos os cards corretamente antes de transicionar
         function clearAllScreens() {
             document.getElementById('card-client-login').style.display = 'none';
             document.getElementById('card-adm-login').style.display = 'none';
@@ -334,27 +341,24 @@
             document.getElementById('card-client-dashboard').style.display = 'none';
         }
 
-        // Mostra a tela de login do ADM
         function showAdminLoginScreen() {
             clearAllScreens();
             document.getElementById('card-adm-login').style.display = 'block';
         }
 
-        // Volta para a tela inicial do cliente
         function backToClientLogin() {
             if(userInterval) clearInterval(userInterval);
             clearAllScreens();
             document.getElementById('card-client-login').style.display = 'block';
         }
 
-        // Valida usuário e senha do administrador e abre o painel
         function validateAdmCredentials() {
             const user = document.getElementById('adm-user').value.trim();
             const pass = document.getElementById('adm-pass').value.trim();
 
             if (user === "Oliveira" && pass === "Oliveira1") {
                 clearAllScreens();
-                document.getElementById('card-adm-dashboard').style.display = 'block'; 
+                document.getElementById('card-adm-dashboard').style.display = 'block';
                 document.getElementById('adm-user').value = "";
                 document.getElementById('adm-pass').value = "";
             } else {
