@@ -215,7 +215,7 @@
         <div class="panel-title">Área de Acesso Cliente</div>
         <div class="form-group">
             <label>Insira sua Licença (Key):</label>
-            <input type="text" class="input-field" id="client-key-input" placeholder="KEY-OLIVEIRA-XXXX">
+            <input type="text" class="input-field" id="client-key-input" placeholder="Digite sua KEY aqui">
         </div>
         <button class="btn-core" onclick="authClientLogin()">Entrar no Sistema</button>
         
@@ -260,7 +260,7 @@
                         <option value="10">Gerar 10 Keys</option>
                     </select>
                 </div>
-                <button class="btn-core" onclick="admGenerateKeys()">Gerar Novas Keys</button>
+                <button class="btn-core" onclick="admGenerateKeys()">Gerar Novas Keys (Local)</button>
 
                 <div class="output-box" id="box-generator" style="display: none;">
                     <div class="keys-list-container" id="container-keys-list"></div>
@@ -315,11 +315,14 @@
     </div>
 
     <script>
-        // BANCO DE CHAVES MESTRES CONFIGURADAS DIRETO NO SISTEMA
+        // BANCO DE DADOS FIXO INTERNO (Igual para todos os utilizadores que abrirem o arquivo)
         const dbKeys = {
-            "OLIVEIRA-VIP-1DIA": { timeLabel: "1 Dia", durationMs: 24 * 60 * 60 * 1000, isActivated: false, expiresAt: null },
-            "OLIVEIRA-VIP-30DIAS": { timeLabel: "30 Dias", durationMs: 30 * 24 * 60 * 60 * 1000, isActivated: false, expiresAt: null },
-            "OLIVEIRA-VIP-PERMANENTE": { timeLabel: "Permanente", durationMs: Infinity, isActivated: true, expiresAt: Infinity }
+            "OLIVEIRA-VIP": { 
+                timeLabel: "Permanente", 
+                durationMs: Infinity, 
+                isActivated: true, 
+                expiresAt: Infinity 
+            }
         };
         
         let userInterval = null;
@@ -356,7 +359,7 @@
             }
         }
 
-        /* --- SISTEMA DO CLIENTE --- */
+        /* --- AUTENTICAÇÃO DO CLIENTE --- */
         function authClientLogin() {
             const inputKey = document.getElementById('client-key-input').value.trim();
             if (!inputKey) return alert('Por favor, digite uma Key válida!');
@@ -409,7 +412,7 @@
             userInterval = setInterval(updateClientTimer, 1000);
         }
 
-        /* --- MOTOR GERADOR DO ADM --- */
+        /* --- GERADOR ADM (APENAS PARA USO LOCAL NO PRÓPRIO APARELHO) --- */
         function admGenerateKeys() {
             const timeOption = document.getElementById('select-days').value;
             const quantity = parseInt(document.getElementById('select-quantity').value);
